@@ -18,6 +18,7 @@ executable app
                        Controllers.Home
                        Views.Home
                        Views.Utils
+                       Function.Lib
   build-depends:       base >=4.3.1,
                        wai-extra >=3.0.0,
                        wai-middleware-static,
