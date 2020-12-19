@@ -1,12 +1,14 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE DeriveGeneric #-}
 
-
 module Controllers.Home
     ( home
     , login
     , post
+    , getPredictedCovidCase
     ) where
+
+import Function.Lib (generate_covid_ltuple)
 
 import           Views.Home (homeView)
 import           Web.Scotty (ScottyM, get, html, json)
@@ -19,14 +21,10 @@ home = get "/" homeView
 login :: ScottyM ()
 login = get "/login" $ html "login"
 
-{-
-  Example data structure to demonstrate JSON serialization
--}
-data Post = Post
-  { postId    :: Int
-  , postTitle :: String } deriving Generic
+--- CovidT object ---
+data CovidT = CovidT {day :: Int, total_case :: Int} deriving (Show, Generic)
+instance ToJSON CovidT
 
-instance ToJSON Post
-
-post :: ScottyM()
-post = get "/post" $ json $ Post 1 "Yello world"
+getPredictedCovidCase :: ScottyM()
+getPredictedCovidCase = get "/get-predicted-result"
+                         $ json [CovidT {day = d, total_case = total} | (d,total) <- generate_covid_ltuple 10 [(1,2),(2,3)]]
