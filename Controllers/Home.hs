@@ -4,7 +4,6 @@
 module Controllers.Home
     ( home
     , login
-    , post
     , getPredictedCovidCase
     ) where
 
