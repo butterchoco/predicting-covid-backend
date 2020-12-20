@@ -10,8 +10,8 @@ module Controllers.Home
 import Function.Lib (generate_covid_ltuple)
 
 import           Views.Home (homeView)
-import           Web.Scotty (ScottyM, get, html, json)
-import           Data.Aeson (ToJSON)
+import           Web.Scotty
+import           Data.Aeson (FromJSON, ToJSON)
 import           GHC.Generics
 
 home :: ScottyM ()
@@ -21,9 +21,28 @@ login :: ScottyM ()
 login = get "/login" $ html "login"
 
 --- CovidT object ---
-data CovidT = CovidT {day :: Int, total_case :: Int} deriving (Show, Generic)
+data CovidT = CovidT {day :: Int, positive :: Int} deriving (Show, Generic)
+data CovidTCases = CovidTCases { cases :: [CovidT], days_predict :: Int } deriving (Show, Generic)
+instance FromJSON CovidT
+instance FromJSON CovidTCases
+instance ToJSON CovidTCases
 instance ToJSON CovidT
 
+--- Receive CovidT data
+--- Return (Int, Int) format
+case_to_int_format :: CovidT -> (Int, Int)
+case_to_int_format (CovidT d p) = (d, p)
+
+--- Receive list of CovidT data
+--- Return list of (Int, Int)
+all_case_format :: [CovidT] -> [(Int, Int)]
+all_case_format arr = foldr (\x y -> [case_to_int_format x] ++ y) [] arr
+
 getPredictedCovidCase :: ScottyM()
-getPredictedCovidCase = get "/get-predicted-result"
-                         $ json [CovidT {day = d, total_case = total} | (d,total) <- generate_covid_ltuple 10 [(1,2),(2,3)]]
+getPredictedCovidCase = post "/get-predicted-result" $ do
+    response <- jsonData :: ActionM CovidTCases
+    let data_all_case = cases response
+    let days_to_predict = days_predict response
+    let data_int_to_int = all_case_format data_all_case
+    let cases = [CovidT {day = d, positive = total} | (d,total) <- generate_covid_ltuple days_to_predict data_int_to_int]
+    json cases
