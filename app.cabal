@@ -20,6 +20,7 @@ executable app
                        Views.Utils
                        Function.Lib
   build-depends:       base >=4.3.1,
+                       wai-cors,
                        wai-extra >=3.0.0,
                        wai-middleware-static,
                        scotty,
