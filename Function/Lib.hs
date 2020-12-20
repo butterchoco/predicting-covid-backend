@@ -19,3 +19,11 @@ covid_function_t t = round (1.0015 * (exp (0.3187* (fromIntegral t :: Float))))
 generate_covid_ltuple :: Int -> [(Int, Int)] -> [(Int, Int)]
 generate_covid_ltuple day [] = []
 generate_covid_ltuple day xs = xs ++ [(day+1, covid_function_t day) | day <- [length xs .. day]]
+
+
+--- Function to generate matrix b which is roughly [[log (covid case cumulative)]]
+getBMatrix arr = [[log y] | (x,y) <- arr]
+
+
+--- Function to generate matrix A which is roughly [[1, day]]
+getAMatrix arr = [[1,x] | (x,y) <- arr ]

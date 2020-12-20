@@ -20,10 +20,6 @@ home = get "/" homeView
 login :: ScottyM ()
 login = get "/login" $ html "login"
 
-getBMatrix arr = [[log y] | (x,y) <- arr]
-
-getAMatrix arr = [[1,x] | (x,y) <- arr ]
-
 --- CovidT object ---
 data CovidT = CovidT {day :: Int, total_case :: Int} deriving (Show, Generic)
 instance ToJSON CovidT
