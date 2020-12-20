@@ -4,6 +4,7 @@ import           Control.Monad                        (join)
 import           Control.Applicative                  ((<$>))
 import           Controllers.Home                     (home, login, getPredictedCovidCase)
 import           Data.Maybe                           (fromMaybe)
+import           Network.Wai.Middleware.Cors
 import           Network.Wai.Middleware.RequestLogger (logStdoutDev)
 import           Network.Wai.Middleware.Static        (addBase, noDots,
                                                        staticPolicy, (>->))
@@ -18,8 +19,9 @@ main = do
         . join
         . fmap readMaybe <$> lookupEnv "PORT"
   scotty port $ do
+         middleware simpleCors
          middleware $ staticPolicy (noDots >-> addBase "static/images") -- for favicon.ico
          middleware logStdoutDev
-         home >> login >> getPredictedCovidCase
+         home >> login >> getPredictedCovidCase >> getPredictedCovidCase
 
 
