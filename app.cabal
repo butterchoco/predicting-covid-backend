@@ -19,6 +19,7 @@ executable app
                        Views.Home
                        Views.Utils
                        Function.Lib
+                       Function.Matrix
   build-depends:       base >=4.3.1,
                        wai-cors,
                        wai-extra >=3.0.0,
