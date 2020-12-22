@@ -41,3 +41,6 @@ determinant :: (Num a, Eq a) => [[a]] -> a
 determinant ((x:[]):[]) = x
 determinant x = sum [ ((-1) ^ ic) * (element 0 ic x) * (determinant (minor 0 ic x)) | ic <- [0..col_len_min1 x]]
 
+cofactor :: (Num a, Eq a) => [[a]] -> [[a]]
+cofactor x = [[ (-1)^(ir + ic) * (determinant(minor ir ic x)) | ic <- [0..col_len_min1 x]] | ir <- [0..row_len_min1 x]]
+
