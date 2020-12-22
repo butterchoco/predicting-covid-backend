@@ -37,3 +37,7 @@ minor r c x = remove_empty [[ element ir ic x | ic <- [0..col_len_min1 x], r /= 
 remove_empty :: Eq a => [[a]] -> [[a]]
 remove_empty x = filter (\a -> a /= []) x
 
+determinant :: (Num a, Eq a) => [[a]] -> a
+determinant ((x:[]):[]) = x
+determinant x = sum [ ((-1) ^ ic) * (element 0 ic x) * (determinant (minor 0 ic x)) | ic <- [0..col_len_min1 x]]
+
