@@ -47,3 +47,5 @@ cofactor x = [[ (-1)^(ir + ic) * (determinant(minor ir ic x)) | ic <- [0..col_le
 adjugate :: (Num a, Eq a) => [[a]] -> [[a]]
 adjugate = transpose . cofactor
 
+inverse :: (Fractional a, Eq a) => [[a]] -> [[a]]
+inverse x = map (map (\a -> (1/determinant x)*a)) (adjugate x)
