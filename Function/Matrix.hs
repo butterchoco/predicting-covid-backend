@@ -5,7 +5,6 @@ transpose ([]:_) = []
 transpose x = (map head x) : transpose (map tail x)
 
 row :: Int -> [[a]] -> [a]
-row _ [] = error "Matrix size (row) should be > n"
 row n (x:xs) | n <= 0 = x
              | otherwise = row (n-1) xs
 
@@ -25,8 +24,6 @@ col_len_min1 x = (length . transpose) x - 1
 
 calculate :: (t1 -> t2 -> a) -> [t1] -> [t2] -> [a]
 calculate f [] [] = []
-calculate f [] _ = error "Both arrays' length should be equal"
-calculate f _ [] = error "Both arrays' length should be equal"
 calculate f (x:xs) (y:ys) = (f x y) : (calculate f xs ys)
 
 dot :: Num a => [[a]] -> [[a]] -> [[a]]
