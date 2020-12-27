@@ -25,22 +25,30 @@ normalFunction arr =  dot (atAInverse arr) ((transpose . atb) arr)
 --- Result: return total covid cases (in t day) type: (Int)
 
 
---- Tinggal diganti ---
-list_val_pbk = normalFunction [(1,2),(2,2),(3,2),(4,2),(5,4)]
-p = list_val_pbk !! 0 !! 0
-a = list_val_pbk !! 0 !! 1
-b = list_val_pbk !! 0 !! 2
--- p =ln(k) --> k = e^p
-k = exp (p)
+-- --- Contoh ---
+-- list_val_pbk = normalFunction [(1,2),(2,2),(3,2),(4,2),(5,4)]
+-- p = list_val_pbk !! 0 !! 0
+-- a = list_val_pbk !! 0 !! 1
+-- b = list_val_pbk !! 0 !! 2
+-- -- p =ln(k) --> k = e^p
+-- k = exp (p)
 
-covid_function_t :: Int -> Int
-covid_function_t t = round (k * (exp (a * (fromIntegral t :: Float))))
-
+covid_function_t :: [(Float, Float)] -> Int -> Int
+covid_function_t xs t = round (exp p * (exp (a * (fromIntegral t :: Float))))
+                where 
+                    p = head(normalFunction xs) !! 0
+                    a = head(normalFunction xs)!! 1
+                    
 --- FUNCTION ---
 
 --- Receive list of tuples (Int, Int) type
 --- First param tuple : day
 --- Second param tuple : current covid cases
-generate_covid_ltuple :: Int -> [(Int, Int)] -> [(Int, Int)]
+
+convertFloatToIntTuple :: [(Float, Float)] -> [(Int,Int)]
+convertFloatToIntTuple xs = [(round x, round y) | (x,y) <- xs]
+
+generate_covid_ltuple :: Int -> [(Float, Float)] -> [(Int, Int)]
 generate_covid_ltuple day [] = []
-generate_covid_ltuple day xs = xs ++ [(day+1, covid_function_t day+1) | day <- [length xs .. day]]
+generate_covid_ltuple day xs = a ++ [(day+1, covid_function_t xs day+1) | day <- [length xs .. day]]
+                        where a = convertFloatToIntTuple xs
