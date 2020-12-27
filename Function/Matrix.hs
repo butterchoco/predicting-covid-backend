@@ -1,4 +1,4 @@
-module Function.Matrix (transpose, inverse) where
+module Function.Matrix (transpose, inverse, dot) where
 
 transpose :: [[a]] -> [[a]]
 transpose ([]:_) = []

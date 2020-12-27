@@ -2,7 +2,7 @@
 module Function.Lib (covid_function_t, generate_covid_ltuple) where
 
 
-import Function.Matrix (transpose, inverse)
+import Function.Matrix (transpose, inverse, dot)
 
 import GHC.Generics
 
