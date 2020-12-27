@@ -24,13 +24,12 @@ normalFunction arr =  dot (atAInverse arr) ((transpose . atb) arr)
 --- First param: day type: (Int)
 --- Result: return total covid cases (in t day) type: (Int)
 
-test = normalFunction [(1,2),(2,2),(3,2),(4,2),(5,4)]
+test days = normalFunction days
 p = test !! 0 !! 0
 a = test !! 0 !! 1
 b = test !! 0 !! 2
 -- p =ln(k) --> k = e^p
 k = exp (p)
-
 
 covid_function_t :: Int -> Int
 covid_function_t t = round (k * (exp (a * (fromIntegral t :: Float))))
