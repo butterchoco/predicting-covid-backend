@@ -17,6 +17,7 @@ atAInverse arr = (inverse . dot ((transpose . getAMatrix) arr)) (getAMatrix arr)
 atb arr = dot ((transpose . getAMatrix) arr) (getBMatrix arr)
 
 -- hasil matrix 1x3 p,a,b
+normalFunction :: (Eq a, Floating a) => [(a, a)] -> [[a]]
 normalFunction arr =  dot (atAInverse arr) ((transpose . atb) arr)
 
 
@@ -33,11 +34,11 @@ normalFunction arr =  dot (atAInverse arr) ((transpose . atb) arr)
 -- -- p =ln(k) --> k = e^p
 -- k = exp (p)
 
-covid_function_t :: [(Float, Float)] -> Int -> Int
-covid_function_t xs t = round (exp p * (exp (a * (fromIntegral t :: Float))))
-                where 
-                    p = head(normalFunction xs) !! 0
-                    a = head(normalFunction xs)!! 1
+-- covid_function_t :: [(Float, Float)] -> Int -> Int
+-- covid_function_t xs t = round (exp p * (exp (a * (fromIntegral t :: Float))))
+--                 where 
+--                     p = head(normalFunction xs) !! 0
+--                     a = head(normalFunction xs)!! 1
                     
 --- FUNCTION ---
 
@@ -45,10 +46,32 @@ covid_function_t xs t = round (exp p * (exp (a * (fromIntegral t :: Float))))
 --- First param tuple : day
 --- Second param tuple : current covid cases
 
-convertFloatToIntTuple :: [(Float, Float)] -> [(Int,Int)]
-convertFloatToIntTuple xs = [(round x, round y) | (x,y) <- xs]
+-- generate_covid_ltuple :: Int -> [(Float, Float)] -> [(Int, Int)]
+-- generate_covid_ltuple day [] = []
+-- generate_covid_ltuple day xs = a ++ [(day+1, covid_function_t xs day+1) | day <- [length xs .. day]]
+--                         where a = convertFloatToIntTuple xs
 
-generate_covid_ltuple :: Int -> [(Float, Float)] -> [(Int, Int)]
+
+
+
+convertFloatToIntTuple :: [(Int,Int)] -> [(Float, Float)]
+convertFloatToIntTuple xs = [(fromIntegral x :: Float, fromIntegral y :: Float) | (x,y) <- xs]
+
+
+--- STUB MODULE
+--- First param: day type: (Int)
+--- Result: return total covid cases (in t day) type: (Int)
+covid_function_t :: [(Int,Int)] -> Int -> Int
+covid_function_t days t = round (1.0015 * (exp (0.3187* (fromIntegral t :: Float))))
+                    where 
+                        p = head(normalFunction (convertFloatToIntTuple days)) !! 0
+                        a = head(normalFunction (convertFloatToIntTuple days)) !! 1
+
+--- FUNCTION ---
+
+--- Receive list of tuples (Int, Int) type
+--- First param tuple : day
+--- Second param tuple : current covid cases
+generate_covid_ltuple :: Int -> [(Int, Int)] -> [(Int, Int)]
 generate_covid_ltuple day [] = []
-generate_covid_ltuple day xs = a ++ [(day+1, covid_function_t xs day+1) | day <- [length xs .. day]]
-                        where a = convertFloatToIntTuple xs
+generate_covid_ltuple day xs = xs ++ [(day+1, covid_function_t xs day+1) | day <- [length xs .. day]]
