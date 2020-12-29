@@ -10,15 +10,15 @@ import GHC.Generics
 getBMatrix arr = [[log y] | (x,y) <- arr]
 
 --- Function to generate matrix A which is roughly [[1, day]]
-getAMatrix arr = [[1,x^2,x] | (x,y) <- arr ]
+getAMatrix arr = [[1,x] | (x,y) <- arr ]
 
 atAInverse arr = (inverse . dot ((transpose . getAMatrix) arr)) (getAMatrix arr)
 
-atb arr = dot ((transpose . getAMatrix) arr) (getBMatrix arr)
+atb arr =  ((dot .transpose . getAMatrix) arr) (getBMatrix arr)
 
--- hasil matrix 1x3 p,a,b
+-- hasil matrix 1x2 p,a
 normalFunction :: (Eq a, Floating a) => [(a, a)] -> [[a]]
-normalFunction arr =  dot (atAInverse arr) ((transpose . atb) arr)
+normalFunction arr =  ((dot . atAInverse) arr) ((transpose . atb) arr)
 
 
 --- STUB MODULE
