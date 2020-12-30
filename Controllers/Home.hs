@@ -7,7 +7,7 @@ module Controllers.Home
     , getPredictedCovidCase
     ) where
 
-import Function.Lib (generate_covid_ltuple)
+import Function.Lib (generateCovidTuple)
 
 import           Views.Home (homeView)
 import           Web.Scotty
@@ -44,5 +44,5 @@ getPredictedCovidCase = post "/get-predicted-result" $ do
     let data_all_case = cases response
     let days_to_predict = days_predict response
     let data_int_to_int = all_case_format data_all_case
-    let cases = [CovidT {day = d, positive = total} | (d,total) <- generate_covid_ltuple days_to_predict data_int_to_int]
+    let cases = [CovidT {day = d, positive = total} | (d,total) <- generateCovidTuple days_to_predict data_int_to_int]
     json cases
