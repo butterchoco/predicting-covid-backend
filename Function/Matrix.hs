@@ -27,8 +27,8 @@ join f [] [] = []
 join f (x:xs) (y:ys) = (f x y) : (join f xs ys)
 
 dot :: Num a => [[a]] -> [[a]] -> [[a]]
-dot x y = [[ sum (mult_row_col rx cy) | rx <- [0..row_len_min1 x]] | cy <- [0..col_len_min1 y]] where
-    mult_row_col rx cy = join (*) (row rx x) (col cy y)
+dot x y = [[ sum (join_mult (row rx x) (col cy y)) | rx <- [0..row_len_min1 x]] | cy <- [0..col_len_min1 y]] where
+    join_mult = join (*)
 
 minor :: Eq a => Int -> Int -> [[a]] -> [[a]]
 minor _ _ [] = []
